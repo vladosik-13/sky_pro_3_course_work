@@ -107,6 +107,23 @@ def get_cardmask_costs_and_cashback(transactions: List[Dict]) -> List[Dict]:
         return []
 
 
+def get_top_transactions(transactions: List[Dict]) -> List[Dict]:
+    """Функция принимает список транзакций словарей и Возвращает список словарей с пятью максимальными
+    транзакциями по сумме операции."""
+
+    logger.info("Функция начала свою работу.")
+
+    if not transactions:
+        logger.warning("Список транзакций пуст.")
+        return []
+
+    top_transactions = sorted(transactions, key=lambda x: abs(x["Сумма операции"]), reverse=True)[:5]
+
+    logger.info("Функция успешно завершила свою работу.")
+
+    return top_transactions
+
+
 if __name__ == "__main__":
     date_input = "2024-10-23 14:30:00"
     print(greetings(date_input))
@@ -118,3 +135,6 @@ if __name__ == "__main__":
         transactions = transactions_df.to_dict(orient='records')
         card_info = get_cardmask_costs_and_cashback(transactions)
         print(card_info)
+
+    top_transactions = get_top_transactions(transactions)
+    print("Топ-5 транзакций по сумме платежа:", top_transactions)
