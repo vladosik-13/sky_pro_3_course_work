@@ -1,6 +1,7 @@
 import logging
 import json
 from datetime import datetime
+import pandas as pd
 
 
 # Настройка логгера
@@ -46,6 +47,26 @@ def greetings(date_str: str) -> str:
         return json.dumps({"error": "Неверный формат даты. Используйте 'YYYY-MM-DD HH:MM:SS'."})
 
 
+def reading_file_from_excel(path_file: str):
+    """Функция преобразования xls в DataFrame."""
+
+    logger.info(f"Начало чтения файла: {path_file}")
+
+    try:
+        transactions = pd.read_excel(path_file)
+        logger.info("Файл успешно прочитан.")
+        return transactions
+    except Exception as e:
+        logger.error(f"Ошибка при чтении файла: {e}")
+        return None
+
+
 if __name__ == "__main__":
     date_input = "2024-10-23 14:30:00"
     print(greetings(date_input))
+
+    excel_path = 'C:/Users/user/PycharmProjects/sky_pro_4_course_work/data/operations.xlsx'
+    transactions_df = reading_file_from_excel(excel_path)
+    if transactions_df is not None:
+        print(transactions_df.head())  # Печатает первые 5 строк DataFrame
+
