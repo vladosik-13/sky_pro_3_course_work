@@ -1,7 +1,10 @@
 import logging
 import json
+import os
 from datetime import datetime
 import pandas as pd
+from dotenv import load_dotenv
+import requests
 
 
 from collections import defaultdict
@@ -124,6 +127,28 @@ def get_top_transactions(transactions: List[Dict]) -> List[Dict]:
     return top_transactions
 
 
+def get_exchange_rates(base_currency="RUB", symbols="EUR,USD,CNY"):
+    load_dotenv()
+    api_key = os.getenv("API_KEY")
+
+    logger.info("Получение курсов валют")
+
+    url = f"https://api.apilayer.com/fixer/latest?symbols={symbols}&base={base_currency}"
+    payload = {}
+    headers = {
+        "apikey": api_key
+    }
+
+    response = requests.get(url, headers=headers, data=payload)
+
+    if response.status_code == 200:
+        logger.info("Успешный запрос. Полученные данные:", response.json())
+        return response.json()  # Возвращаем данные в формате JSON
+    else:
+        logger.error("Ошибка при получении данных. Статус-код: %d", response.status_code)
+        return {"error": f"Failed to fetch data. Status code: {response.status_code}"}
+
+
 if __name__ == "__main__":
     date_input = "2024-10-23 14:30:00"
     print(greetings(date_input))
@@ -138,3 +163,6 @@ if __name__ == "__main__":
 
     top_transactions = get_top_transactions(transactions)
     print("Топ-5 транзакций по сумме платежа:", top_transactions)
+
+    exchange_rates = get_exchange_rates()
+    print(exchange_rates)
