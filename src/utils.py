@@ -1,18 +1,26 @@
-import pandas as pd
+import json
+from datetime import datetime
 
 
-def excel_import(path_file):
-    """Функция принимает аргументом путь к файлу Excel и возвращает список словарей с транзакциями в формате
-    python, плюс все карты владельца"""
-    try:
-        excel_data = pd.read_excel('C:/Users/user/PycharmProjects/sky_pro_4_course_work/data/operations.xlsx')
-        uniq_values = excel_data['Номер карты'].unique()
-        return excel_data, uniq_values
-    except Exception as e:
-        print(f"Ошибка при считывании файла: {e}")
-        return []
+def greetings(date_str: str) -> str:
+    input_datetime = datetime.strptime(date_str, '%Y-%m-%d %H:%M:%S')
+    hour = input_datetime.hour
+    if hour < 6:
+        greeting = "Доброй ночи"
+    elif hour < 12:
+        greeting = "Доброе утро"
+    elif hour < 18:
+        greeting = "Добрый день"
+    else:
+        greeting = "Добрый вечер"
+
+    response = {
+        "greeting": greeting
+    }
+
+    return json.dumps(response)
 
 
-
-test_func = excel_import('C:/Users/user/PycharmProjects/sky_pro_4_course_work/data/operations.xlsx')
-print(test_func)
+if __name__ == "__main__":
+    date_input = "2024-10-23 14:30:00"
+    print(greetings(date_input))
