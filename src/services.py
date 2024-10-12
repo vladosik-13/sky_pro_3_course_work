@@ -30,3 +30,22 @@ def round_payment(limit: int, payment: Union[int, float]) -> int:
     logger.info("Завершение работы функции round_payment.")
     return rounded_payment
 
+
+def filter_transactions_by_month(month: str, transactions: List[Dict[str, Any]]) -> List[Dict]:
+    """Функция возвращает транзакции, отфильтрованные по указанному месяцу."""
+    logger.info("Начало работы функции filter_transactions_by_month.")
+
+    try:
+        target_date = datetime.datetime.strptime(month, "%Y-%m")
+    except ValueError as e:
+        logger.error("Неверный формат месяца: %s", e)
+        return []
+
+    filtered_transactions = [
+        tx for tx in transactions if
+        datetime.datetime.strptime(tx["Дата операции"], "%d.%m.%Y %H:%M:%S").month == target_date.month
+        and datetime.datetime.strptime(tx["Дата операции"], "%d.%m.%Y %H:%M:%S").year == target_date.year
+    ]
+
+    logger.info("Завершение работы функции filter_transactions_by_month.")
+    return filtered_transactions
