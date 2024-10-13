@@ -1,15 +1,13 @@
-import logging
 import json
+import logging
 import os
-from datetime import datetime
-import pandas as pd
-from dotenv import load_dotenv
-import requests
-
-
 from collections import defaultdict
-from typing import List, Dict
+from datetime import datetime
+from typing import Dict, List
 
+import pandas as pd
+import requests
+from dotenv import load_dotenv
 
 # Настройка логгера
 logger = logging.getLogger(__file__)

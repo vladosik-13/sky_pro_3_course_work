@@ -1,12 +1,11 @@
 import datetime
-import logging
 import json
+import logging
 from math import ceil, floor
 from typing import Any, Dict, List, Union
 
 from config import SERVICES_LOGS
 from src.utils import reading_file_from_excel
-
 
 logger = logging.getLogger(__name__)
 logger.setLevel(logging.DEBUG)
