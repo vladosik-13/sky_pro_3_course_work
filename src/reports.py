@@ -74,3 +74,20 @@ def filter_by_date(transactions: List[Dict], date: str = "") -> List[Dict[str, A
             filtered_transactions.append(transaction)
     logger.info("Фильтрация по дате завершена.")
     return filtered_transactions
+
+
+@log()
+def transactions_by_category(transactions: pd.DataFrame, category: str, date: str = "") -> pd.DataFrame:
+    """Основная функция для получения транзакций по категории и дате."""
+    logger.info("Начало обработки транзакций по категории.")
+    valid_transactions = transactions[transactions["Категория"].notnull()]
+    logger.info("Удаление пустых значений в категории.")
+    transactions_list = valid_transactions.to_dict(orient="records")
+
+    logger.info("Передача данных для дальнейшей обработки.")
+    filtered_by_date_list = filter_by_date(transactions_list, date)
+    filtered_by_category_list = filter_by_category(category, filtered_by_date_list)
+
+    result_df = pd.DataFrame(filtered_by_category_list)
+    logger.info("Обработка транзакций завершена.")
+    return result_df
