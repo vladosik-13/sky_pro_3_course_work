@@ -40,7 +40,7 @@ def log(filename: str = "log_file.json") -> Any:
 
 
 def filter_by_category(category: str, transactions: List[Dict[str, Any]]) -> List[Dict[str, Any]]:
-    """Фильтрация транзакций по категории."""
+    """функция фильтрации транзакций по категории."""
     logger.info("Начало фильтрации по категории.")
     regex_pattern = rf"{category}"
     logger.info("Обработка транзакций.")
@@ -50,4 +50,27 @@ def filter_by_category(category: str, transactions: List[Dict[str, Any]]) -> Lis
         if re.search(regex_pattern, transaction["Категория"], flags=re.IGNORECASE)
     ]
     logger.info("Фильтрация по категории завершена.")
+    return filtered_transactions
+
+
+def filter_by_date(transactions: List[Dict], date: str = "") -> List[Dict[str, Any]]:
+    """функция ильтрации транзакций по дате."""
+    logger.info("Начало фильтрации по дате.")
+    start_time = datetime.time(hour=0)
+    end_time = datetime.time(hour=23, minute=59, second=59)
+
+    if not date:
+        end_date = datetime.datetime.today()
+        start_date = end_date - datetime.timedelta(weeks=12)
+    else:
+        end_date = datetime.datetime.strptime(date, "%Y-%m-%d")
+        start_date = end_date - datetime.timedelta(weeks=12)
+
+    filtered_transactions = []
+    logger.info("Обработка транзакций по дате.")
+    for transaction in transactions:
+        transaction_date = datetime.datetime.strptime(transaction["Дата операции"], "%d.%m.%Y %H:%M:%S")
+        if start_date <= transaction_date <= end_date:
+            filtered_transactions.append(transaction)
+    logger.info("Фильтрация по дате завершена.")
     return filtered_transactions
