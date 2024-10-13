@@ -37,3 +37,17 @@ def log(filename: str = "log_file.json") -> Any:
         return wrapped
 
     return decorator
+
+
+def filter_by_category(category: str, transactions: List[Dict[str, Any]]) -> List[Dict[str, Any]]:
+    """Фильтрация транзакций по категории."""
+    logger.info("Начало фильтрации по категории.")
+    regex_pattern = rf"{category}"
+    logger.info("Обработка транзакций.")
+    filtered_transactions = [
+        transaction
+        for transaction in transactions
+        if re.search(regex_pattern, transaction["Категория"], flags=re.IGNORECASE)
+    ]
+    logger.info("Фильтрация по категории завершена.")
+    return filtered_transactions
