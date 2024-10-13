@@ -3,7 +3,7 @@ import logging
 import os
 from collections import defaultdict
 from datetime import datetime
-from typing import Dict, List
+from typing import Dict, List, Tuple, Any
 
 import pandas as pd
 import requests
@@ -126,6 +126,7 @@ def get_top_transactions(transactions: List[Dict]) -> List[Dict]:
 
 
 def get_exchange_rates(base_currency="RUB", symbols="EUR,USD,CNY"):
+    """Функция обращается к стороннему API и возвращает курс валют"""
     load_dotenv()
     api_key = os.getenv("API_KEY")
 
@@ -145,6 +146,25 @@ def get_exchange_rates(base_currency="RUB", symbols="EUR,USD,CNY"):
     else:
         logger.error("Ошибка при получении данных. Статус-код: %d", response.status_code)
         return {"error": f"Failed to fetch data. Status code: {response.status_code}"}
+
+
+def get_file_from_json(file_name: str = "user_settings.json") -> Tuple[Any, Any]:
+    """Функция парсинга и обработки json-файла с транзакциями.
+    Возвращает кортеж списков валют и акций."""
+
+    logger.info("Функция начала свою работу.")
+
+    file_with_dir = os.path.join(ROOT_DIR, file_name)
+    try:
+        with open(file_with_dir, "r", encoding="utf-8") as file_in:
+            data_json = json.load(file_in)
+
+            logger.info("Функция успешно завершила свою работу.")
+
+            return data_json["user_currencies"], data_json["user_stocks"]
+    except Exception:
+        logger.error("Возникла ошибка при обработке файла пользовательских настроек!")
+        raise ValueError("Возникла ошибка при обработке файла пользовательских настроек!")
 
 
 if __name__ == "__main__":
