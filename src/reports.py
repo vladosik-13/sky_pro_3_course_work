@@ -56,8 +56,6 @@ def filter_by_category(category: str, transactions: List[Dict[str, Any]]) -> Lis
 def filter_by_date(transactions: List[Dict], date: str = "") -> List[Dict[str, Any]]:
     """функция ильтрации транзакций по дате."""
     logger.info("Начало фильтрации по дате.")
-    start_time = datetime.time(hour=0)
-    end_time = datetime.time(hour=23, minute=59, second=59)
 
     if not date:
         end_date = datetime.datetime.today()
@@ -112,4 +110,4 @@ data_from_excel = pd.DataFrame(
 
 
 if __name__ == "__main__":
-    print(transactions_by_category(data_from_excel, "Фастфуд", "2023-10-15"))
+    print(transactions_by_category(data_from_excel, "Каршеринг", "2023-10-15"))
