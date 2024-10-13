@@ -1,6 +1,5 @@
 import json
 import logging
-import os
 
 from config import VIEWS_LOGS
 from src.utils import (
