@@ -1,7 +1,11 @@
 import pytest
+import datetime
+
+
 from typing import List, Dict, Any
-from src.reports import filter_by_category
-import re
+
+
+from src.reports import filter_by_category, filter_by_date
 
 
 def test_filter_by_category_success():
@@ -78,3 +82,13 @@ def test_filter_by_category_special_characters():
     result = filter_by_category(category, transactions)
 
     assert result == expected
+
+
+def test_filter_by_date_invalid_date_format():
+    """Тест обработки ошибки при неправильном формате даты."""
+    transactions = [
+        {"ID": 1, "Дата операции": "01.10.2023 10:00:00", "Сумма операции": 100},
+    ]
+
+    with pytest.raises(ValueError):
+        filter_by_date(transactions, "not-a-date")
